@@ -82,7 +82,7 @@ def sweep(*things):
                 keys.append(str(thing[0])) # key is str
                 pairs.append((thing[0],thing[1]))
                 if len(thing)!=2:
-                    raise Exception("All things must be constants or else key-value pairs (length==2)\n\t%s"%thing)
+                    raise Exception("Everything passed to sweep() must be constants or else key-value pairs (length==2)\n\tBad argument:%s"%str(thing))
             else:
                 key = keygen.next() # key is int
                 keys.append(key)
