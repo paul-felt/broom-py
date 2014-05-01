@@ -110,24 +110,30 @@ def sweep(*things):
 def join(keys,state,delim=' ',equals='='):
     ''' 
     Assemble keys,state pairs such as result from sweep() into a string 
-    such as "key1=val1 key2=val2 key3=val3 val4".
+    such as "key1=val1 key2=val2 key3=val3 val4". 
 
     Notes:
         Keys define the order of the items in the string.
         State determines the values. Integer keys are 
             assumed to have been generated automatically by sweep() and 
             are removed from the string like val4 in the example above. 
+        If state[key]==None, the key value is not printed at all.
+        If state[key]=='', the key value is printed but the equals and value are omitted.
     '''
     # key,value pair -> option string
     optlist = []
     for key in keys:
-        #print key,state
-        val = str(state[key]) # val -> str
-        # ignore auto-key
-        if isinstance(key,int):
-            optlist.append(val)
-        else:
-            optlist.append(equals.join((key,val)))
+        if state[key] is not None: # ignore keys whose value is None
+            val = str(state[key]) # val -> str
+            # 'val' (auto-key)
+            if isinstance(key,int):
+                optlist.append(val)
+            # 'key' (empty string values)
+            elif len(val)==0:
+                optlist.append(key)
+            # 'key=value' (normal key-val pair)
+            else:
+                optlist.append(equals.join((key,val)))
 
     # option strings -> command string
     return delim.join(optlist)
@@ -243,6 +249,7 @@ if __name__=="__main__":
         ('--a',('zero','one')),
         ('--b',CustomValues('custom').generator),
         ('--c',Mapper('--a',{'zero':'ais0','one':'ais1'}).generator),
+        ('--nota',Mapper('--a',{'zero':'','one':None}).generator),
         outgen,
     )
 

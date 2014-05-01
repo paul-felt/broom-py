@@ -99,6 +99,7 @@ if __name__=="__main__":
         ('--a',('zero','one')),
         ('--b',CustomValues('custom').generator),
         ('--c',Mapper('--a',{'zero':'ais0','one':'ais1'}).generator),
+        ('--nota',Mapper('--a',{'zero':'','one':None}).generator),
         outgen,
     )
 
@@ -113,8 +114,8 @@ if __name__=="__main__":
 
 Output
 ```
-command --constant-option=pink --a=zero --b=0custom --c=ais0 > zero-0custom-ais0.csv
-command --constant-option=pink --a=zero --b=1custom --c=ais0 > zero-1custom-ais0.csv
+command --constant-option=pink --a=zero --b=0custom --c=ais0 --nota > zero-0custom-ais0.csv
+command --constant-option=pink --a=zero --b=1custom --c=ais0 --nota > zero-1custom-ais0.csv
 command --constant-option=pink --a=one --b=0custom --c=ais1 > one-0custom-ais1.csv
 command --constant-option=pink --a=one --b=1custom --c=ais1 > one-1custom-ais1.csv
 slopt
