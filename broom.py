@@ -188,10 +188,7 @@ class Mapper():
 
         # otherwise, default
         if not didyield:
-            if self.default is not None:
-                yield self.default
-            else:
-                logger.warn('Mapper found no mapping\n\tstatekey=%s \n\tstate=%s\n\tvalmapping=%s' % (self.statekey, state, self.valmapping))
+            yield self.default
 
 class Range():
     ''''
