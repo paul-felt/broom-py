@@ -188,7 +188,8 @@ class Mapper():
 
         # otherwise, default
         if not didyield:
-            yield self.default
+            for yld in self.list_yield(self.default):
+                yield yld
 
 class Range():
     ''''
