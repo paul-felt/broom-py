@@ -1,7 +1,4 @@
 #!/usr/bin/python
-import logging
-logging.basicConfig()
-logger = logging.getLogger('broom')
 
 #################################
 # Support functions
