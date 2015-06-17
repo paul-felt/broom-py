@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import re
 
 #################################
 # Support functions
@@ -145,19 +146,18 @@ class Mapper():
     following to sweep():
     sweep(
         ('dataset',('big','small)),
-        ('size',Mapper('dataset',{'big':1000,'small':10}).generator),
+        ('size',Mapper('dataset',{'big':1000,'s.*l':10}).generator),
     )
 
-    Note:
-        If the value is a tuple rather than a constant, all values are yielded.
-        If you want to match substrings, set matchsubstrings=False. 
-            When multiple substrings match, only the first is used.
-        If you only want to specify exceptions, set default=value 
+    Notes:
+        - Regular expressions are allowed (see above example).
+        - If the value is a tuple rather than a constant, all values are yielded.
+        - If multiple patterns match, an error is raised.
+        - The default value (if specified) is returned when nothing is matched.
     '''
-    def __init__(self,statekey,valmapping,matchsubstrings=False,default=None):
+    def __init__(self,statekey,valmapping,default=None):
         self.statekey=statekey
         self.valmapping=valmapping
-        self.matchsubstrings=matchsubstrings
         self.default=default
     def list_yield(self,thing):
         if isinstance(thing,(list,tuple)):
@@ -169,17 +169,11 @@ class Mapper():
         stateval = state[self.statekey]
         # yield all mappings that contain substrings of the state value
         didyield = False
-        if self.matchsubstrings:
-            for mapkey,mapval in self.valmapping.items():
-                if mapkey in stateval:
-                    for yld in self.list_yield(mapval):
-                        yield yld
-                    didyield = True
-                    break # only yield the first match
-        # exact match
-        else:
-            if stateval in self.valmapping:
-                for yld in self.list_yield(self.valmapping[stateval]):
+        for mapkey,mapval in self.valmapping.items():
+            assert isinstance(mapkey,str), "the mapping key %s is not a string but rather a %s"%(mapkey,str(type(mapkey)))
+            if stateval is not None and re.match(mapkey,stateval):
+                assert not didyield, "multiple keys matched the value %s for Mapper(%s) matched multiple values"%(stateval,self.statekey)
+                for yld in self.list_yield(mapval):
                     yield yld
                 didyield = True
 

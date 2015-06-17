@@ -49,14 +49,15 @@ I want the state['size'] to be 10. Then I could pass in the
 following to sweep():
 sweep(
     ('dataset',('big','small)),
-    ('size',Mapper('dataset',{'big':1000,'small':10}).generator),
+    ('size',Mapper('dataset',{'big':1000,'s.*l':10}).generator),
 )
 
-Note:
+Notes:
+    Regular expressions are allowed (see above example).
     If the value is a tuple rather than a constant, all values are yielded.
-    If you want to match substrings, set matchsubstrings=False. 
-        When multiple substrings match, only the first is used.
-    If you only want to specify exceptions, set default=value
+    If multiple patterns match, an error is raised.
+    The default value (if specified) is returned when nothing is matched.
+
 
 
 
