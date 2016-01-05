@@ -122,3 +122,5 @@ command --constant-option=pink --a=one --b=1custom --c=ais1 > one-1custom-ais1.c
 slopt
 ```
 
+# JobFarm
+Executes a collection of commands on multiple machines via ssh. This script assumes you have a cluster of machines with password-free ssh keys set up among them. It can be used in conjunction with broom.py by using broom.py to define a command generator function, and then using jobfarm to distribute those commands over a machine cluster. 
